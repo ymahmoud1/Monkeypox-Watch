@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from plotly import __version__
 import cufflinks as cf
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-
 init_notebook_mode(connected=True)
 cf.go_offline()
 import plotly.express as px
