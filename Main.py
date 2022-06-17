@@ -23,14 +23,14 @@ cases = mp_data[mp_data['Status'] == 'confirmed']
 def figure1():
     fig1 = px.bar(cases.groupby('Country').count().reset_index(), x='Country', y='ID',
                   title='Confirmed Cases in Countries (Figure 1)', labels={'ID': 'Total Cases'}, text_auto=True)
-    return fig1.show()
+    return fig1
 
 #Line chart of daily infections
 def figure2():
     fig2 = px.line(cases.groupby('Date_confirmation').count().reset_index(),
                    x='Date_confirmation', y='ID', title='Daily Infections',
                    labels={'ID': 'Confirmed Cases', 'Date_confirmation': 'Date'}, markers=True)
-    return fig2.show()
+    return fig2
 
 #main class
 def main():
