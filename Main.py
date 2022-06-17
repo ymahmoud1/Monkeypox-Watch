@@ -13,12 +13,11 @@ import streamlit as st
 
 
 #data collection
-def data():
-    url = 'https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv'
-    output = 'mp_updated_data.csv'
-    urllib.request.urlretrieve(url,output)
-    mp_data = pd.read_csv(output)
-    cases = mp_data[mp_data['Status'] == 'confirmed']
+url = 'https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv'
+output = 'mp_updated_data.csv'
+urllib.request.urlretrieve(url,output)
+mp_data = pd.read_csv(output)
+cases = mp_data[mp_data['Status'] == 'confirmed']
 
 #Total cases bar chart
 def figure1():
@@ -40,13 +39,9 @@ def main():
     st.title('Monkeypox - Dashboard')
     st.markdown('A project by Yazan Mahmoud')
     #data vis
-    data()
     figure1()
     figure2()
     
 
 if __name__ == '__main__':
     main()
-
-    
-   
