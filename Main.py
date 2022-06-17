@@ -8,9 +8,13 @@ from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 init_notebook_mode(connected=True)
 cf.go_offline()
 import plotly.express as px
+import urllib.request 
 
 if __name__ == '__main__':
-    mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
+    url = 'https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv'
+    output = 'mp_updated_data.csv'
+    urllib.request.urlretrieve(url,output)
+    mp_data = pd.read_csv(output)
     conf_cases = mp_data[mp_data['Status'] == 'confirmed']
     fig1 = px.bar(conf_cases.groupby('Country').count().reset_index(), x='Country', y='ID',
                   title='Confirmed Cases in Countries (Figure 1)', labels={'ID': 'Total Cases'}, text_auto=True)
