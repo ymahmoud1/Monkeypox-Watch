@@ -9,6 +9,7 @@ init_notebook_mode(connected=True)
 cf.go_offline()
 import plotly.express as px
 import urllib.request 
+import streamlit as st
 
 if __name__ == '__main__':
     url = 'https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv'
