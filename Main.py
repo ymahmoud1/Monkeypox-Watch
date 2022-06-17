@@ -11,16 +11,42 @@ import plotly.express as px
 import urllib.request 
 import streamlit as st
 
-if __name__ == '__main__':
+
+#data collection
+def data():
     url = 'https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv'
     output = 'mp_updated_data.csv'
     urllib.request.urlretrieve(url,output)
     mp_data = pd.read_csv(output)
-    conf_cases = mp_data[mp_data['Status'] == 'confirmed']
-    fig1 = px.bar(conf_cases.groupby('Country').count().reset_index(), x='Country', y='ID',
+    cases = mp_data[mp_data['Status'] == 'confirmed']
+
+#Total cases bar chart
+def figure1():
+    fig1 = px.bar(cases.groupby('Country').count().reset_index(), x='Country', y='ID',
                   title='Confirmed Cases in Countries (Figure 1)', labels={'ID': 'Total Cases'}, text_auto=True)
-    fig2 = px.line(conf_cases.groupby('Date_confirmation').count().reset_index(),
+    return fig1.show()
+
+#Line chart of daily infections
+def figure2():
+    fig2 = px.line(cases.groupby('Date_confirmation').count().reset_index(),
                    x='Date_confirmation', y='ID', title='Daily Infections',
                    labels={'ID': 'Confirmed Cases', 'Date_confirmation': 'Date'}, markers=True)
-    fig1.show()
-    fig2.show()
+    return fig2.show()
+
+#main class
+def main():
+    #app setup
+    st.set_page_config(layout="wide")
+    st.title('Monkeypox - Dashboard')
+    st.markdown('A project by Yazan Mahmoud')
+    #data vis
+    data()
+    figure1()
+    figure2()
+    
+
+if __name__ == '__main__':
+    main()
+
+    
+   
