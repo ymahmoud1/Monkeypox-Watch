@@ -12,7 +12,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
-cases = pd.DataFrame({'num': [1, 2, 3], "let": ['a', 'b', 'c']})
+
 
 
 
@@ -21,7 +21,6 @@ cases = pd.DataFrame({'num': [1, 2, 3], "let": ['a', 'b', 'c']})
 @st.cache(suppress_st_warning=True)
 def figure1():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
-    global cases
     cases = mp_data[mp_data['Status'] == 'confirmed']
     fig1 = px.bar(cases.groupby('Country').count().reset_index(), x='Country', y='ID',
                   title='Confirmed Cases in Countries (Figure 1)', labels={'ID': 'Total Cases'}, text_auto=True)
@@ -32,7 +31,6 @@ def figure1():
 @st.cache(suppress_st_warning=True)
 def figure2():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
-    global cases
     cases = mp_data[mp_data['Status'] == 'confirmed']
     fig2 = px.line(cases.groupby('Date_confirmation').count().reset_index(),
                    x='Date_confirmation', y='ID', labels={'ID': 'Confirmed Cases', 'Date_confirmation': 'Date'},
@@ -44,7 +42,6 @@ def figure2():
 @st.cache(suppress_st_warning=True)
 def states_fig():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
-    global cases
     cases = mp_data[mp_data['Status'] == 'confirmed']
     state_cases = cases.groupby(by=['Country', 'Location']).count().loc['United States'].reset_index()
     us_states = {'AK': 0, 'AL': 0, 'AR': 0, 'AZ': 0, 'CA': 0, 'CO': 0, 'CT': 0,
@@ -174,7 +171,6 @@ def states_fig():
 @st.cache(suppress_st_warning=True)
 def value():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
-    global cases
     cases = mp_data[mp_data['Status'] == 'confirmed']
     val=int(cases.groupby('Date_confirmation').count().reset_index().iloc[-1]['ID'])
     return val
@@ -182,7 +178,6 @@ def value():
 @st.cache(suppress_st_warning=True)
 def delta():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
-    global cases
     cases = mp_data[mp_data['Status'] == 'confirmed']
     delt = (int(cases.groupby('Date_confirmation').count().reset_index().iloc[-2]['ID'])
           - int(cases.groupby('Date_confirmation').count().reset_index().iloc[-1]['ID'])) * -1
@@ -190,7 +185,6 @@ def delta():
 
 def data_date():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
-    global cases
     cases = mp_data[mp_data['Status'] == 'confirmed']
     date = pd.to_datetime(cases.groupby('Date_confirmation').count().reset_index().iloc[-1]['Date_confirmation']).strftime('%B %d, %Y')
     return date
