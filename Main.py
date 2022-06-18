@@ -18,7 +18,7 @@ def figure1():
     cases = mp_data[mp_data['Status'] == 'confirmed']
     fig1 = px.bar(cases.groupby('Country').count().reset_index(), x='Country', y='ID',
                   title='Confirmed Cases in Countries (Figure 1)', labels={'ID': 'Total Cases'}, text_auto=True)
-    return st.plotly_chart(fig1)
+    return fig1
 
 #Line chart of daily infections
 @st.cache(suppress_st_warning=True)
@@ -28,7 +28,7 @@ def figure2():
     fig2 = px.line(cases.groupby('Date_confirmation').count().reset_index(),
                    x='Date_confirmation', y='ID', title='Daily Infections',
                    labels={'ID': 'Confirmed Cases', 'Date_confirmation': 'Date'}, markers=True)
-    return st.plotly_chart(fig2)
+    return fig2
 
 #map of U.S infections
 @st.cache(suppress_st_warning=True)
@@ -157,7 +157,7 @@ def states_fig():
                 z = list(us_states.values()), text = state_names, colorbar = {'title': 'Cases'}, colorscale = 'reds')
     layout = dict(geo = {'scope':'usa'})
     choromap = go.Figure(data = [data], layout = layout)
-    return st.plotly_chart(choromap)
+    return choromap
     
      
 #main class
@@ -167,9 +167,9 @@ def main():
     st.title('Monkeypox - Dashboard')
     st.markdown('A project by Yazan Mahmoud')
     #data vis
-    figure1()
-    figure2()
-    states_fig()
+    st.plotly_chart(figure1())
+    st.plotly_chart(figure2())
+    st.plotly_chart(states_fig())
 
     
 
