@@ -5,18 +5,23 @@ import matplotlib.pyplot as plt
 from plotly import __version__
 import cufflinks as cf
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-
+import datetime
 init_notebook_mode(connected=True)
 cf.go_offline()
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
+cases = pd.DataFrame({'num': [1, 2, 3], "let": ['a', 'b', 'c']})
+
+
+
 
 # Total cases bar chart
 @st.cache(suppress_st_warning=True)
 def figure1():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
+    global cases
     cases = mp_data[mp_data['Status'] == 'confirmed']
     fig1 = px.bar(cases.groupby('Country').count().reset_index(), x='Country', y='ID',
                   title='Confirmed Cases in Countries (Figure 1)', labels={'ID': 'Total Cases'}, text_auto=True)
@@ -27,10 +32,11 @@ def figure1():
 @st.cache(suppress_st_warning=True)
 def figure2():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
+    global cases
     cases = mp_data[mp_data['Status'] == 'confirmed']
     fig2 = px.line(cases.groupby('Date_confirmation').count().reset_index(),
-                   x='Date_confirmation', y='ID', title='Daily Infections',
-                   labels={'ID': 'Confirmed Cases', 'Date_confirmation': 'Date'}, markers=True)
+                   x='Date_confirmation', y='ID', labels={'ID': 'Confirmed Cases', 'Date_confirmation': 'Date'},
+                   markers=True)
     return fig2
 
 
@@ -38,6 +44,7 @@ def figure2():
 @st.cache(suppress_st_warning=True)
 def states_fig():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
+    global cases
     cases = mp_data[mp_data['Status'] == 'confirmed']
     state_cases = cases.groupby(by=['Country', 'Location']).count().loc['United States'].reset_index()
     us_states = {'AK': 0, 'AL': 0, 'AR': 0, 'AZ': 0, 'CA': 0, 'CO': 0, 'CT': 0,
@@ -164,26 +171,56 @@ def states_fig():
     return choromap
 
 
-# main class
 @st.cache(suppress_st_warning=True)
-def main():
-    st.set_page_config(layout="wide")
+def value():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
+    global cases
     cases = mp_data[mp_data['Status'] == 'confirmed']
+    val=int(cases.groupby('Date_confirmation').count().reset_index().iloc[-1]['ID'])
+    return val
+
+@st.cache(suppress_st_warning=True)
+def delta():
+    mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
+    global cases
+    cases = mp_data[mp_data['Status'] == 'confirmed']
+    delt = (int(cases.groupby('Date_confirmation').count().reset_index().iloc[-2]['ID'])
+          - int(cases.groupby('Date_confirmation').count().reset_index().iloc[-1]['ID'])) * -1
+    return delt
+
+def data_date():
+    mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
+    global cases
+    cases = mp_data[mp_data['Status'] == 'confirmed']
+    date = pd.to_datetime(cases.groupby('Date_confirmation').count().reset_index().iloc[-1]['Date_confirmation']).strftime('%B %d, %Y')
+    return date
+
+# main class
+
+def main():
     # app setup
+    # st.set_page_config(layout="wide")
     st.title('Monkeypox - Dashboard')
     st.subheader('A project by Yazan Mahmoud')
-    st.metric(label='Daily Infections', value = int(cases.groupby('Date_confirmation').count().reset_index().iloc[-1]['ID']),
-              delta= int(cases.groupby('Date_confirmation').count().reset_index().iloc[-2]['ID'])
-                     - int(cases.groupby('Date_confirmation').count().reset_index().iloc[-1]['ID']))
-    st.sidebar.title('Navigate')
+    st.sidebar.title("Navigate")
+    navigation = st.sidebar.selectbox('To where?',
+                                      ("Cases by Country", 'Daily Worldwide Infections', "Cases in the United States"))
     # data vis
-    st.plotly_chart(figure1())
-    st.plotly_chart(figure2())
-    st.plotly_chart(states_fig())
+    if navigation == 'Cases by Country':
+        st.plotly_chart(figure1())
+    elif navigation == 'Daily Worldwide Infections':
+        col1, col2, col3 = st.columns([3, 2, 1])
+        with col1:
+            st.subheader('Daily Worldwide Infections')
+            st.plotly_chart(figure2())
+        with col3:
+            st.metric(label=data_date(),
+                      value=value(),
+                      delta=delta())
+
+    elif navigation == "Cases in the United States":
+        st.plotly_chart(states_fig())
 
 
 if __name__ == '__main__':
     main()
-
-
