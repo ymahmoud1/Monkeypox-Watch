@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 #Total cases bar chart
-@st.cache
+@st.cache(suppress_st_warning=True)
 def figure1():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
     cases = mp_data[mp_data['Status'] == 'confirmed']
@@ -21,7 +21,7 @@ def figure1():
     return st.plotly_chart(fig1)
 
 #Line chart of daily infections
-@st.cache
+@st.cache(suppress_st_warning=True)
 def figure2():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
     cases = mp_data[mp_data['Status'] == 'confirmed']
@@ -31,7 +31,7 @@ def figure2():
     return st.plotly_chart(fig2)
 
 #map of U.S infections
-@st.cache
+@st.cache(suppress_st_warning=True)
 def states_fig():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
     cases = mp_data[mp_data['Status'] == 'confirmed']
