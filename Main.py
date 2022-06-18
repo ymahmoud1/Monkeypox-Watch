@@ -9,33 +9,33 @@ init_notebook_mode(connected=True)
 cf.go_offline()
 import plotly.express as px
 import plotly.graph_objects as go
-import urllib.request 
 import streamlit as st
 
-
-#data collection/global variables
-url = 'https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv'
-output = 'mp_updated_data.csv'
-urllib.request.urlretrieve(url,output)
-mp_data = pd.read_csv(output)
-cases = mp_data[mp_data['Status'] == 'confirmed']
-state_cases=cases.groupby(by=['Country','Location']).count().loc['United States'].reset_index()
-
 #Total cases bar chart
+@st.cache
 def figure1():
+    mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
+    cases = mp_data[mp_data['Status'] == 'confirmed']
     fig1 = px.bar(cases.groupby('Country').count().reset_index(), x='Country', y='ID',
                   title='Confirmed Cases in Countries (Figure 1)', labels={'ID': 'Total Cases'}, text_auto=True)
     return st.plotly_chart(fig1)
 
 #Line chart of daily infections
+@st.cache
 def figure2():
+    mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
+    cases = mp_data[mp_data['Status'] == 'confirmed']
     fig2 = px.line(cases.groupby('Date_confirmation').count().reset_index(),
                    x='Date_confirmation', y='ID', title='Daily Infections',
                    labels={'ID': 'Confirmed Cases', 'Date_confirmation': 'Date'}, markers=True)
     return st.plotly_chart(fig2)
 
 #map of U.S infections
+@st.cache
 def states_fig():
+    mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
+    cases = mp_data[mp_data['Status'] == 'confirmed']
+    state_cases=cases.groupby(by=['Country','Location']).count().loc['United States'].reset_index()
     us_states = {'AK': 0,'AL': 0,'AR': 0,'AZ': 0,'CA': 0,'CO': 0,'CT': 0,
     'DC': 0,'DE': 0,'FL': 0,'GA': 0,'HI': 0,'IA': 0,'ID': 0,'IL': 0,'IN': 0,
     'KS': 0,'KY': 0,'LA': 0,'MA': 0,'MD': 0,'ME': 0,'MI': 0,'MN': 0,'MO': 0,
