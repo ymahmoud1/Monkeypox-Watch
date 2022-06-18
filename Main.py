@@ -166,6 +166,7 @@ def main():
     st.set_page_config(layout="wide")
     st.title('Monkeypox - Dashboard')
     st.markdown('A project by Yazan Mahmoud')
+    st.sidebar.title('Navigate')
     #data vis
     st.plotly_chart(figure1())
     st.plotly_chart(figure2())
