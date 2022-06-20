@@ -257,7 +257,7 @@ def main():
         st.title('Monkeypox - Dashboard')
         st.subheader('A project by Yazan Mahmoud')
         st.markdown("Welcome! This app's purpose is to provide people with data visualization of the Monkeypox virus.")
-        image = Image.open('Monkeypox.jpg')
+        image = Image.open('./app pics/ Monkeypox.jpg')
         st.image(image)
     elif navigation == 'Cases by Country':
         st.header('Confirmed Cases in Countries')
