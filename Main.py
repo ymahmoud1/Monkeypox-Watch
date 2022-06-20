@@ -6,6 +6,7 @@ import streamlit as st
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 init_notebook_mode(connected=True)
 cf.go_offline()
+from PIL import Image
 
 nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola',
            'Anguilla', 'Antigua And Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia',
@@ -256,6 +257,8 @@ def main():
         st.title('Monkeypox - Dashboard')
         st.subheader('A project by Yazan Mahmoud')
         st.markdown("Welcome! This app's purpose is to provide people with data visualization of the Monkeypox virus.")
+        image = Image.open('Monkeypox.jpg')
+        st.image(image)
     elif navigation == 'Cases by Country':
         st.header('Confirmed Cases in Countries')
         st.plotly_chart(figure1())
