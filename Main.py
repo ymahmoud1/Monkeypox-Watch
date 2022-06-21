@@ -4,9 +4,10 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+from PIL import Image
 init_notebook_mode(connected=True)
 cf.go_offline()
-from PIL import Image
+
 
 nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola',
            'Anguilla', 'Antigua And Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia',
@@ -74,7 +75,7 @@ def figure2():
     return fig2
 
 
-# map of U.S infections
+# map of US infections
 def states_fig():
     state_cases = data().groupby(by=['Country', 'Location']).count().loc['United States'].reset_index()
     us_states = {'AK': 0, 'AL': 0, 'AR': 0, 'AZ': 0, 'CA': 0, 'CO': 0, 'CT': 0,
@@ -218,8 +219,22 @@ def no_cases():
     return nations_list
 
 
-# to start working on
-# def country_info_graph1(country):
+# Gender graph for chosen country
+def gender_graph(country):
+    cont = data()[data()['Country'] == country.title()]
+    cont['Gender'].fillna('Unknown', inplace=True)
+    graph1 = px.histogram(cont['Country'], color=cont['Gender'], labels={'value': 'Country', 'count': 'Count'},
+                          text_auto=True, width=400, template='simple_white', title='Gender of Cases')
+    return graph1
+
+
+# Symptom graph for chosen country
+def symptom_graph(country):
+    cont = data()[data()['Country'] == country.title()]
+    cont['Symptoms'].fillna('Unknown', inplace=True)
+    graph2 = px.histogram(x=cont['Symptoms'], labels={'x': 'Symptoms', 'count': 'Count'},
+                          text_auto=True, width=400, template='simple_white', title='Symptoms of Cases')
+    return graph2
 
 
 # Number of confirmed daily worldwide cases, used in metric
@@ -256,19 +271,29 @@ def main():
     if navigation == 'Home':
         st.title('Monkeypox - Dashboard')
         st.subheader('A project by Yazan Mahmoud')
-        st.markdown("Welcome! This app's purpose is to provide people with data visualization of the Monkeypox virus.")
-        image = Image.open('app pics/Monkeypox.jpg')
-        st.image(image)
+        st.markdown("Welcome! This app's purpose is to provide people with data visualization of the monkeypox virus.")
+        st.markdown("The monkeypox virus is a ")
+        image = Image.open('C:/Users/yazan/PycharmProjects/Monkeypox/app pics/Monkeypox.jpg')
+        st.image(image,
+                 caption='A close up of the monkeypox virus infecting cells. Credit: UK Health Security Agency/Science Photo Library',
+                 width=530)
     elif navigation == 'Cases by Country':
         st.header('Confirmed Cases in Countries')
         st.plotly_chart(figure1())
         st.subheader('Nations With Most Confirmed Cases')
         st.table(data().groupby('Country').count()['Cases'].sort_values(ascending=False).head(10))
-        selected_nation = st.selectbox('Select a country:', (nations))
+        selected_nation = st.selectbox('Select a country for more information:', (nations))
         if selected_nation in no_cases():
             st.write("This country has no confirmed cases of the monkeypox virus.")
-        # Will work on
-        # elif selected_nation in with_cases():
+        elif selected_nation in with_cases():
+            st.subheader('Here is some more information on your chosen country: ' + selected_nation)
+            col1, col2 = st.columns([1, 1])
+            with col1:
+                st.markdown('**Figure 1**')
+                st.plotly_chart(gender_graph(selected_nation))
+            with col2:
+                st.markdown('**Figure 2**')
+                st.plotly_chart(symptom_graph(selected_nation))
     elif navigation == 'Daily Worldwide Infections':
         col3, col4, col5 = st.columns([3, 2, 1])
         with col3:
