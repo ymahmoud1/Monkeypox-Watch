@@ -5,9 +5,10 @@ import plotly.graph_objects as go
 import streamlit as st
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 from PIL import Image
+from datetime import date
+
 init_notebook_mode(connected=True)
 cf.go_offline()
-
 
 nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola',
            'Anguilla', 'Antigua And Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia',
@@ -20,7 +21,7 @@ nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'An
            'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'East Timor', 'Ecuador', 'Egypt', 'El Salvador',
            'Equatorial Guinea',
            'Eritrea', 'Estonia', 'Ethiopia', 'England', 'Falkland Islands (Malvinas)', 'Faroe Islands', 'Fiji',
-           'Finland' 'France', 'French Guiana', 'French Polynesia', 'French S. Territories', 'Gabon', 'Gambia',
+           'Finland', 'France', 'French Guiana', 'French Polynesia', 'French S. Territories', 'Gabon', 'Gambia',
            'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam',
            'Guatemala', 'Guinea', 'Guinea-bissau', 'Guyana', 'Haiti', 'Honduras', 'Hong Kong', 'Hungary',
            'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jordan',
@@ -72,6 +73,7 @@ def figure2():
     fig2 = px.line(data().groupby('Date_confirmation').count().reset_index(),
                    x='Date_confirmation', y='Cases', labels={'ID': 'Confirmed Cases', 'Date_confirmation': 'Date'},
                    markers=True)
+    fig2.update_layout(width=800, height=500)
     return fig2
 
 
@@ -224,7 +226,7 @@ def gender_graph(country):
     cont = data()[data()['Country'] == country.title()]
     cont['Gender'].fillna('Unknown', inplace=True)
     graph1 = px.histogram(cont['Country'], color=cont['Gender'], labels={'value': 'Country', 'count': 'Count'},
-                          text_auto=True, width=400, template='simple_white', title='Gender of Cases')
+                          text_auto=True, width=375, template='simple_white', title='Gender of Cases')
     return graph1
 
 
@@ -237,10 +239,28 @@ def symptom_graph(country):
     return graph2
 
 
+# Daily infections of picked country
+def daily_country_graph(country):
+    cont = data()[data()['Country'] == country.title()].groupby('Date_confirmation').count().reset_index()
+    graph = px.scatter(x=cont['Date_confirmation'], y=cont['Cases'], width=600, template='plotly',
+                       title='Daily Cases in ' + country, labels={'x': 'Date', 'y': 'Cases'})
+    return graph
+
+#function shows number of cases and the last day they were reported for each country
+def cases_today(country):
+    if country in no_cases():
+        return "No confirmed cases ever reported"
+    else:
+        country_date = pd.to_datetime(
+            data()[data()['Country'] == country.title()]['Date_confirmation'].iloc[-1]).strftime('%B %d, %Y')
+        string = str(data()[data()['Country'] == country.title()].groupby('Date_confirmation')
+                     .count().iloc[-1]['Cases']) +' confirmed case(s) last reported on ' + country_date
+        return string
+
+
+
 # Number of confirmed daily worldwide cases, used in metric
 def value():
-    mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
-    cases = mp_data[mp_data['Status'] == 'confirmed']
     val = int(data().groupby('Date_confirmation').count().reset_index().iloc[-1]['Cases'])
     return val
 
@@ -282,28 +302,33 @@ def main():
         st.plotly_chart(figure1())
         st.subheader('Nations With Most Confirmed Cases')
         st.table(data().groupby('Country').count()['Cases'].sort_values(ascending=False).head(10))
-        selected_nation = st.selectbox('Select a country for more information:', (nations))
-        if selected_nation in no_cases():
+        selected_nation1 = st.selectbox('Select a country for more information:', (nations))
+        if selected_nation1 in no_cases():
             st.write("This country has no confirmed cases of the monkeypox virus.")
-        elif selected_nation in with_cases():
-            st.subheader('Here is some more information on your chosen country: ' + selected_nation)
-            col1, col2 = st.columns([1, 1])
+        elif selected_nation1 in with_cases():
+            st.subheader('Here is some more information on your chosen country: ' + selected_nation1)
+            col1, col2, col3 = st.columns([1, 1, 1])
             with col1:
                 st.markdown('**Figure 1**')
-                st.plotly_chart(gender_graph(selected_nation))
+                st.plotly_chart(gender_graph(selected_nation1))
             with col2:
                 st.markdown('**Figure 2**')
-                st.plotly_chart(symptom_graph(selected_nation))
+                st.plotly_chart(symptom_graph(selected_nation1))
+            with col3:
+                st.markdown('**Figure 3**')
+                st.plotly_chart(daily_country_graph(selected_nation1))
+                st.write('Dates with no markers have zero confirmed cases.')
     elif navigation == 'Daily Worldwide Infections':
-        col3, col4, col5 = st.columns([3, 2, 1])
-        with col3:
+        col4, col5 = st.columns([3, 1])
+        with col4:
             st.subheader('Daily Worldwide Infections')
             st.plotly_chart(figure2())
+            selected_nation2 = st.selectbox('Select a country for its most recent day of confirmed cases:', (nations))
+            st.markdown(cases_today(selected_nation2))
         with col5:
             st.metric(label=data_date(),
                       value=value(),
                       delta=delta())
-
     elif navigation == "Cases in the United States":
         st.header('Number of Cases in Every State')
         st.plotly_chart(states_fig())
