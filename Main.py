@@ -246,7 +246,7 @@ def daily_country_graph(country):
                        title='Daily Cases in ' + country, labels={'x': 'Date', 'y': 'Cases'})
     return graph
 
-#function shows number of cases and the last day they were reported for each country
+
 def cases_today(country):
     if country in no_cases():
         return "No confirmed cases ever reported"
@@ -298,8 +298,14 @@ def main():
                  caption='A close up of the monkeypox virus infecting cells. Credit: UK Health Security Agency/Science Photo Library',
                  width=530)
     elif navigation == 'Cases by Country':
-        st.header('Confirmed Cases in Countries')
-        st.plotly_chart(figure1())
+        col6, col7 = st.columns([3,1])
+        with col6:
+            st.header('Confirmed Cases in Countries')
+            st.plotly_chart(figure1())
+        with col7:
+            st.metric(label="Total Cases", value = data()['Cases'].count(),
+                      delta= int(data()['Cases'].count()) - sum(data().groupby('Date_confirmation').count().iloc[:-1]['Cases']))
+
         st.subheader('Nations With Most Confirmed Cases')
         st.table(data().groupby('Country').count()['Cases'].sort_values(ascending=False).head(10))
         selected_nation1 = st.selectbox('Select a country for more information:', (nations))
