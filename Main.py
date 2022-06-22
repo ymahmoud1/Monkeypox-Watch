@@ -254,9 +254,8 @@ def cases_today(country):
         country_date = pd.to_datetime(
             data()[data()['Country'] == country.title()]['Date_confirmation'].iloc[-1]).strftime('%B %d, %Y')
         string = str(data()[data()['Country'] == country.title()].groupby('Date_confirmation')
-                     .count().iloc[-1]['Cases']) +' confirmed case(s) last reported on ' + country_date
+                     .count().iloc[-1]['Cases']) + ' confirmed case(s) last reported on ' + country_date
         return string
-
 
 
 # Number of confirmed daily worldwide cases, used in metric
@@ -295,16 +294,17 @@ def main():
         st.markdown("The monkeypox virus is a ")
         image = Image.open('C:/Users/yazan/PycharmProjects/Monkeypox/app pics/Monkeypox.jpg')
         st.image(image,
-                 caption='A close up of the monkeypox virus infecting cells. Credit: UK Health Security Agency/Science Photo Library',
-                 width=530)
+                 caption='A close up of the monkeypox virus infecting cells. Credit: UK Health Security '
+                         'Agency/Science Photo Library', width=530)
     elif navigation == 'Cases by Country':
-        col6, col7 = st.columns([3,1])
+        col6, col7 = st.columns([3, 1])
         with col6:
             st.header('Confirmed Cases in Countries')
             st.plotly_chart(figure1())
         with col7:
-            st.metric(label="Total Cases", value = data()['Cases'].count(),
-                      delta= int(data()['Cases'].count()) - sum(data().groupby('Date_confirmation').count().iloc[:-1]['Cases']))
+            st.metric(label="Total Cases", value=data()['Cases'].count(),
+                      delta=int(data()['Cases'].count()) - sum(
+                          data().groupby('Date_confirmation').count().iloc[:-1]['Cases']))
 
         st.subheader('Nations With Most Confirmed Cases')
         st.table(data().groupby('Country').count()['Cases'].sort_values(ascending=False).head(10))
@@ -336,8 +336,15 @@ def main():
                       value=value(),
                       delta=delta())
     elif navigation == "Cases in the United States":
-        st.header('Number of Cases in Every State')
-        st.plotly_chart(states_fig())
+        col8, col9 = st.columns([3,1])
+        with col8:
+            st.header('Number of Cases in Every State')
+            st.plotly_chart(states_fig())
+        with col9:
+            st.metric(label='Total cases in the states:', value=data().groupby('Country').count().loc['United States']
+            ['Cases'], delta= str(sum(data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States']
+            ['Cases']) - sum(data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States'].iloc[:-1]
+            ['Cases'])) + ' from previous report date.')
 
 
 if __name__ == '__main__':
