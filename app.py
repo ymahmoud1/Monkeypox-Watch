@@ -3,9 +3,7 @@ import cufflinks as cf
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-from plotly.offline import init_notebook_mode
 from PIL import Image
-init_notebook_mode(connected=True)
 cf.go_offline()
 
 nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola',
@@ -50,7 +48,7 @@ nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'An
 
 
 # a function that extracts and updates the monkeypox data
-@st.cache(ttl=24*60*60)
+@st.cache(ttl=24 * 60 * 60)
 def data():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
     cases = mp_data[mp_data['Status'] == 'confirmed']
@@ -93,8 +91,8 @@ def states_fig():
                    "New Hampshire", "New Jersey", "New Mexico", "Nevada", "New York", "Ohio", "Oklahoma", "Oregon",
                    "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas",
                    "Utah", "Virginia", "Vermont", "Washington", "Wisconsin", "West Virginia", "Wyoming"]
-           
-    # Fixing data flaws in grouping states       
+
+    # Fixing data flaws in grouping states
     for x in range(len(state_cases['Location'])):
         if 'California' in state_cases['Location'][x]:
             us_states['CA'] = us_states['CA'] + state_cases['Cases'][x]
@@ -199,12 +197,11 @@ def states_fig():
     datas = dict(type='choropleth', locations=list(us_states.keys()), locationmode='USA-states',
                  z=list(us_states.values()), text=state_names, colorbar={'title': 'Cases'}, colorscale='reds')
     layout = dict(geo={'scope': 'usa'})
-    
+
     # The U.S map
     choromap = go.Figure(data=[datas], layout=layout)
     choromap.update_layout(width=900, height=600)
     return choromap
-
 
 
 # A list of countries with confirmed monkeypox cases
@@ -248,6 +245,7 @@ def daily_country_graph(country):
     graph = px.scatter(x=cont['Date_confirmation'], y=cont['Cases'], width=600, template='plotly',
                        title='Daily Cases in ' + country, labels={'x': 'Date', 'y': 'Cases'})
     return graph
+
 
 # Reports last batch of confirmed cases of selected country
 def cases_today(country):
@@ -299,12 +297,12 @@ def main():
         st.markdown('The virus is generally found among monkeys and rodents in parts of central and western Africa '
                     ' ,but can infect humans when in close contact with the carrier.')
         st.markdown("**This is the first ever major outbreak of the virus**.")
-        image = Image.open('C:/Users/yazan/PycharmProjects/Monkeypox/app pics/Monkeypox.jpg')
+        image = Image.open('./app pics/Monkeypox.jpg')
         st.image(image,
                  caption='A close up of the monkeypox virus infecting cells. Credit: UK Health Security '
                          'Agency/Science Photo Library', width=530)
-           
-    # Country info page       
+
+    # Country info page
     elif navigation == 'Cases by Country':
         col6, col7 = st.columns([3, 1])
         with col6:
@@ -333,7 +331,7 @@ def main():
                 st.markdown('**Figure 3**')
                 st.plotly_chart(daily_country_graph(selected_nation1))
                 st.write('Dates with no markers have zero confirmed cases.')
-           
+
     # Daily Infections Page
     elif navigation == 'Daily Worldwide Infections':
         col4, col5 = st.columns([3, 1])
@@ -346,18 +344,19 @@ def main():
             st.metric(label=data_date(),
                       value=value(),
                       delta=delta())
-                      
+
     # U.S Map page
     elif navigation == "Cases in the United States":
-        col8, col9 = st.columns([3,1])
+        col8, col9 = st.columns([3, 1])
         with col8:
             st.header('Number of Cases in Every State')
             st.plotly_chart(states_fig())
         with col9:
             st.metric(label='Total cases in the states:', value=data().groupby('Country').count().loc['United States']
-            ['Cases'], delta= str(sum(data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States']
-            ['Cases']) - sum(data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States'].iloc[:-1]
-            ['Cases'])) + ' from previous report date.')
+            ['Cases'], delta=str(sum(data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States']
+                                     ['Cases']) - sum(
+                data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States'].iloc[:-1]
+                ['Cases'])) + ' from previous report date.')
 
 
 if __name__ == '__main__':
