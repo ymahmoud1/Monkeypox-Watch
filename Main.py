@@ -3,10 +3,8 @@ import cufflinks as cf
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+from plotly.offline import init_notebook_mode
 from PIL import Image
-from datetime import date
-
 init_notebook_mode(connected=True)
 cf.go_offline()
 
@@ -20,7 +18,7 @@ nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'An
            'Cook Islands', 'Costa Rica', 'Cote D`ivoire', 'Croatia', 'Cuba', 'Cyprus', 'Czech Republic',
            'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'East Timor', 'Ecuador', 'Egypt', 'El Salvador',
            'Equatorial Guinea',
-           'Eritrea', 'Estonia', 'Ethiopia', 'England', 'Falkland Islands (Malvinas)', 'Faroe Islands', 'Fiji',
+           'Eritrea', 'Estonia', 'Ethiopia', 'England', 'Falkland Island', 'Faroe Islands', 'Fiji',
            'Finland', 'France', 'French Guiana', 'French Polynesia', 'French S. Territories', 'Gabon', 'Gambia',
            'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam',
            'Guatemala', 'Guinea', 'Guinea-bissau', 'Guyana', 'Haiti', 'Honduras', 'Hong Kong', 'Hungary',
@@ -47,12 +45,12 @@ nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'An
            'Tokelau', 'Tonga', 'Trinidad And Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu', 'Uganda',
            'Ukraine', 'United Arab Emirates',
            'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City State', 'Venezuela', 'Viet Nam',
-           'Virgin Islands (British)',
-           'Virgin Islands (U.S.)', 'Wales', 'Western Sahara', 'Yemen', 'Zaire', 'Zambia', 'Zimbabwe']
+           'British Virgin Islands',
+           'U.S. Virgin Islands', 'Wales', 'Western Sahara', 'Yemen', 'Zaire', 'Zambia', 'Zimbabwe']
 
 
 # a function that extracts and updates the monkeypox data
-@st.cache(suppress_st_warning=True)
+@st.cache(ttl=24*60*60)
 def data():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
     cases = mp_data[mp_data['Status'] == 'confirmed']
@@ -79,6 +77,7 @@ def figure2():
 
 # map of US infections
 def states_fig():
+    # Seperating cases in each state
     state_cases = data().groupby(by=['Country', 'Location']).count().loc['United States'].reset_index()
     us_states = {'AK': 0, 'AL': 0, 'AR': 0, 'AZ': 0, 'CA': 0, 'CO': 0, 'CT': 0,
                  'DC': 0, 'DE': 0, 'FL': 0, 'GA': 0, 'HI': 0, 'IA': 0, 'ID': 0, 'IL': 0, 'IN': 0,
@@ -94,7 +93,8 @@ def states_fig():
                    "New Hampshire", "New Jersey", "New Mexico", "Nevada", "New York", "Ohio", "Oklahoma", "Oregon",
                    "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas",
                    "Utah", "Virginia", "Vermont", "Washington", "Wisconsin", "West Virginia", "Wyoming"]
-
+           
+    # Fixing data flaws in grouping states       
     for x in range(len(state_cases['Location'])):
         if 'California' in state_cases['Location'][x]:
             us_states['CA'] = us_states['CA'] + state_cases['Cases'][x]
@@ -199,9 +199,12 @@ def states_fig():
     datas = dict(type='choropleth', locations=list(us_states.keys()), locationmode='USA-states',
                  z=list(us_states.values()), text=state_names, colorbar={'title': 'Cases'}, colorscale='reds')
     layout = dict(geo={'scope': 'usa'})
+    
+    # The U.S map
     choromap = go.Figure(data=[datas], layout=layout)
     choromap.update_layout(width=900, height=600)
     return choromap
+
 
 
 # A list of countries with confirmed monkeypox cases
@@ -246,7 +249,7 @@ def daily_country_graph(country):
                        title='Daily Cases in ' + country, labels={'x': 'Date', 'y': 'Cases'})
     return graph
 
-
+# Reports last batch of confirmed cases of selected country
 def cases_today(country):
     if country in no_cases():
         return "No confirmed cases ever reported"
@@ -271,7 +274,7 @@ def delta():
     return delt
 
 
-# the date of the most recent batch of confirmed cases
+# The date of the most recent batch of confirmed cases
 def data_date():
     date = pd.to_datetime(
         data().groupby('Date_confirmation').count().reset_index().iloc[-1]['Date_confirmation']).strftime('%B %d, %Y')
@@ -282,20 +285,26 @@ def data_date():
 def main():
     # app setup
     st.set_page_config(layout="wide")
-    st.sidebar.title("Navigate")
-    navigation = st.sidebar.selectbox('To where?',
+    st.sidebar.title('Monkeypox-Dashboard')
+    navigation = st.sidebar.selectbox('Navigate',
                                       ("Home", "Cases by Country", 'Daily Worldwide Infections',
                                        "Cases in the United States"))
-    # data vis
+    # Home page
     if navigation == 'Home':
         st.title('Monkeypox - Dashboard')
         st.subheader('A project by Yazan Mahmoud')
         st.markdown("Welcome! This app's purpose is to provide people with data visualization of the monkeypox virus.")
-        st.markdown("The monkeypox virus is a ")
+        st.markdown("The monkeypox virus is a virus that was first discovered in 1958 among some monkeys that were "
+                    " being researched.")
+        st.markdown('The virus is generally found among monkeys and rodents in parts of central and western Africa '
+                    ' ,but can infect humans when in close contact with the carrier.')
+        st.markdown("**This is the first ever major outbreak of the virus**.")
         image = Image.open('C:/Users/yazan/PycharmProjects/Monkeypox/app pics/Monkeypox.jpg')
         st.image(image,
                  caption='A close up of the monkeypox virus infecting cells. Credit: UK Health Security '
                          'Agency/Science Photo Library', width=530)
+           
+    # Country info page       
     elif navigation == 'Cases by Country':
         col6, col7 = st.columns([3, 1])
         with col6:
@@ -324,6 +333,8 @@ def main():
                 st.markdown('**Figure 3**')
                 st.plotly_chart(daily_country_graph(selected_nation1))
                 st.write('Dates with no markers have zero confirmed cases.')
+           
+    # Daily Infections Page
     elif navigation == 'Daily Worldwide Infections':
         col4, col5 = st.columns([3, 1])
         with col4:
@@ -335,6 +346,8 @@ def main():
             st.metric(label=data_date(),
                       value=value(),
                       delta=delta())
+                      
+    # U.S Map page
     elif navigation == "Cases in the United States":
         col8, col9 = st.columns([3,1])
         with col8:
