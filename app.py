@@ -301,7 +301,7 @@ def main():
         st.image(image,
                  caption='A close up of the monkeypox virus infecting cells. Credit: UK Health Security '
                          'Agency/Science Photo Library', width=530)
-        st.caption('Thanks to Global Health for the data! Data: Global.health Monkeypox (accessed on 2022-06-14)')
+        st.write('Thanks to Global Health for the data! Data: Global.health Monkeypox (accessed on 2022-06-14)')
 
     # Country info page
     elif navigation == 'Cases by Country':
