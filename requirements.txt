@@ -3,4 +3,4 @@ pandas
 cufflinks
 plotly
 plotly.express
-PIL
+Pillow
