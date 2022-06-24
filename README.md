@@ -5,7 +5,7 @@ However, with those limitations in mind, I thought it might still be handy to pr
 
 You can view the app using this link: https://ymahmoud1-monkeypox-watch-app-1ft3py.streamlitapp.com/
 
-# OR
+**OR
 
 You can clone the repository, install all the modules found in the requirements file and then in the directory run the command:
 ```
