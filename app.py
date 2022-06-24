@@ -69,7 +69,7 @@ def figure2():
     fig2 = px.line(data().groupby('Date_confirmation').count().reset_index(),
                    x='Date_confirmation', y='Cases', labels={'ID': 'Confirmed Cases', 'Date_confirmation': 'Date'},
                    markers=True)
-    fig2.update_layout(width=800, height=500)
+    fig2.update_layout(width=900, height=500)
     return fig2
 
 
