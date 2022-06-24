@@ -3,11 +3,11 @@ Welcome to my data visualization app on the spread of the monkeypox virus. This 
 The only issue is that unlike wide spreading pandemics such as COVID, the data on the monkeypox is very limited. 
 However, with those limitations in mind, I thought it might still be handy to produce an app that can display the fragmented data in a simple, and easily understood manner. 
 
-YOU CAN VIEW THE APP USING THIS LINK: https://ymahmoud1-monkeypox-watch-app-1ft3py.streamlitapp.com/
+You can view the app using this link: https://ymahmoud1-monkeypox-watch-app-1ft3py.streamlitapp.com/
 
-OR
+# OR
 
-you can also clone the repository, install all the modules found in the requirements file and then in the directory run the command:
+You can clone the repository, install all the modules found in the requirements file and then in the directory run the command:
 ```
 streamlit run app.py
 ```
