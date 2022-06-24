@@ -18,3 +18,7 @@ streamlit run app.py
 **2. Daily Worldwide Infections:** This page presents a line chart of the daily reported confirmed cases worldwide. It also shows a metric of the last day cases were reported, how many cases were reported that day, and the difference between the report day and the day before it. There is a select box too that displays the last day of reported confirmed cases and the number of confirmed cases for a selected country.
 
 **3. Cases in the United States:** This page holds an interractive U.S map that displays confirmed cases of the virus in each state. It also shows a metric of the total cases in the U.S.
+
+# Data:
+[Monkeypox Data](https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv) by Global.health
+
