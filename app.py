@@ -60,7 +60,7 @@ def data():
 def figure1():
     fig1 = px.bar(data().groupby('Country').count().reset_index(), x='Country', y='Cases', labels={'ID': 'Total Cases'},
                   text_auto=True)
-    fig1.update_layout(width=800, height=500)
+    fig1.update_layout(width=900, height=500)
     return fig1
 
 
