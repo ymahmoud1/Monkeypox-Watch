@@ -4,6 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from PIL import Image
+
 cf.go_offline()
 
 nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola',
@@ -359,8 +360,8 @@ def main():
             ['Cases'], delta=str(sum(data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States']
                                      ['Cases']) - sum(
                 data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States'].iloc[:-1]
-                ['Cases'])) + str(data().groupby(['Country', 'Date_confirmation']).count().loc['United States']
-                .reset_index()['Date_confirmation'].iloc[-2]))
+                ['Cases'])) + ' case(s) from ' + str(data().groupby(['Country', 'Date_confirmation']).count().loc['United States']
+                                           .reset_index()['Date_confirmation'].iloc[-2]))
 
 
 if __name__ == '__main__':
