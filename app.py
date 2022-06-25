@@ -359,7 +359,7 @@ def main():
             ['Cases'], delta=str(sum(data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States']
                                      ['Cases']) - sum(
                 data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States'].iloc[:-1]
-                ['Cases'])) + ' from previous report date.')
+                ['Cases'])) + str(data().grouby('Country').count()['Date_confirmation'].iloc[-2]))
 
 
 if __name__ == '__main__':
