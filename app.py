@@ -287,6 +287,8 @@ def main():
     navigation = st.sidebar.selectbox('Navigate',
                                       ("Home", "Cases by Country", 'Daily Worldwide Infections',
                                        "Cases in the United States"))
+    st.sidebar.subheader('Github Repository:')
+    st.sidebar.markdown('[Monkeypox-Watch Repo](https://github.com/ymahmoud1/Monkeypox-Watch)')
     # Home page
     if navigation == 'Home':
         st.title('Monkeypox - Dashboard')
@@ -301,8 +303,6 @@ def main():
         st.image(image,
                  caption='A close up of the monkeypox virus infecting cells. Credit: UK Health Security '
                          'Agency/Science Photo Library', width=530)
-        st.subheader('The Github repository:')
-        st.markdown('[Monkeypox-Watch Repository](https://github.com/ymahmoud1/Monkeypox-Watch)')
         st.write('Thanks to Global Health for the data! Data: Global.health Monkeypox (accessed on 2022-06-14)')
 
     # Country info page
