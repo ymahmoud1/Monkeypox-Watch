@@ -308,14 +308,14 @@ def main():
 
     # Country info page
     elif navigation == 'Cases by Country':
-        col1, col2, col3 = st.columns([3, 0.4, 1])
+        col1, col2, col3 = st.columns([3, 0.45, 1])
         with col1:
             st.header('Confirmed Cases in Countries')
             st.plotly_chart(figure1())
         with col2:
             st.metric(label="Total Cases", value=data()['Cases'].count(),
-                      delta=int(data()['Cases'].count()) - sum(
-                          data().groupby('Date_confirmation').count().iloc[:-1]['Cases']))
+                      delta=str(int(data()['Cases'].count()) - sum(
+                          data().groupby('Date_confirmation').count().iloc[:-1]['Cases'])) + ' case(s)')
         with col3:
             st.metric(label='Nations With Confirmed Cases', value=data()['Country'].nunique())
         st.subheader('Nations With Most Confirmed Cases')
