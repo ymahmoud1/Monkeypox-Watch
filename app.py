@@ -61,7 +61,7 @@ def data():
 def figure1():
     fig1 = px.bar(data().groupby('Country').count().reset_index(), x='Country', y='Cases', labels={'ID': 'Total Cases'},
                   text_auto=True)
-    fig1.update_layout(width=900, height=500)
+    fig1.update_layout(width=1000, height=500)
     return fig1
 
 
@@ -308,7 +308,7 @@ def main():
 
     # Country info page
     elif navigation == 'Cases by Country':
-        col6, col7 = st.columns([3, 1])
+        col6, col7 = st.columns([4, 1])
         with col6:
             st.header('Confirmed Cases in Countries')
             st.plotly_chart(figure1())
