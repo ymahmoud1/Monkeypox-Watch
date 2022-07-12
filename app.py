@@ -61,7 +61,7 @@ def data():
 def figure1():
     fig1 = px.bar(data().groupby('Country').count().reset_index(), x='Country', y='Cases', labels={'ID': 'Total Cases'},
                   text_auto=True)
-    fig1.update_layout(width=1100, height=550)
+    fig1.update_layout(width=1050, height=500)
     return fig1
 
 
@@ -308,15 +308,16 @@ def main():
 
     # Country info page
     elif navigation == 'Cases by Country':
-        col6, col7 = st.columns([4, 1])
-        with col6:
+        col1, col2, col3 = st.columns([3, 0.4, 1])
+        with col1:
             st.header('Confirmed Cases in Countries')
             st.plotly_chart(figure1())
-        with col7:
+        with col2:
             st.metric(label="Total Cases", value=data()['Cases'].count(),
                       delta=int(data()['Cases'].count()) - sum(
                           data().groupby('Date_confirmation').count().iloc[:-1]['Cases']))
-
+        with col3:
+            st.metric(label='Nations With Confirmed Cases', value=data()['Country'].nunique())
         st.subheader('Nations With Most Confirmed Cases')
         st.table(data().groupby('Country').count()['Cases'].sort_values(ascending=False).head(10))
         selected_nation1 = st.selectbox('Select a country for more information:', (nations))
@@ -324,44 +325,45 @@ def main():
             st.write("This country has no confirmed cases of the monkeypox virus.")
         elif selected_nation1 in with_cases():
             st.subheader('Here is some more information on your chosen country: ' + selected_nation1)
-            col1, col2, col3 = st.columns([1, 1, 1])
-            with col1:
+            col4, col5, col6 = st.columns([1, 1, 1])
+            with col4:
                 st.markdown('**Figure 1**')
                 st.plotly_chart(gender_graph(selected_nation1))
-            with col2:
+            with col5:
                 st.markdown('**Figure 2**')
                 st.plotly_chart(symptom_graph(selected_nation1))
-            with col3:
+            with col6:
                 st.markdown('**Figure 3**')
                 st.plotly_chart(daily_country_graph(selected_nation1))
                 st.write('Dates with no markers have zero confirmed cases.')
 
     # Daily Infections Page
     elif navigation == 'Daily Worldwide Infections':
-        col4, col5 = st.columns([3, 1])
-        with col4:
+        col7, col8 = st.columns([3, 1])
+        with col7:
             st.subheader('Daily Worldwide Infections')
             st.plotly_chart(figure2())
             selected_nation2 = st.selectbox('Select a country for its most recent day of confirmed cases:', (nations))
             st.markdown(cases_today(selected_nation2))
-        with col5:
+        with col8:
             st.metric(label=data_date(),
                       value=value(),
                       delta=delta())
 
     # U.S Map page
     elif navigation == "Cases in the United States":
-        col8, col9 = st.columns([3, 1])
-        with col8:
+        col9, col10 = st.columns([3, 1])
+        with col9:
             st.header('Number of Cases in Every State')
             st.plotly_chart(states_fig())
-        with col9:
+        with col10:
             st.metric(label='Total cases in the states:', value=data().groupby('Country').count().loc['United States']
             ['Cases'], delta=str(sum(data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States']
                                      ['Cases']) - sum(
                 data().groupby(by=['Country', 'Date_confirmation']).count().loc['United States'].iloc[:-1]
-                ['Cases'])) + ' case(s) from ' + str(data().groupby(['Country', 'Date_confirmation']).count().loc['United States']
-                                           .reset_index()['Date_confirmation'].iloc[-2]))
+                ['Cases'])) + ' case(s) from ' + str(
+                data().groupby(['Country', 'Date_confirmation']).count().loc['United States']
+                .reset_index()['Date_confirmation'].iloc[-2]))
 
 
 if __name__ == '__main__':
