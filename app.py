@@ -54,6 +54,7 @@ def data():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
     cases = mp_data[mp_data['Status'] == 'confirmed']
     cases.rename(columns={'ID': 'Cases'}, inplace=True)
+    cases['Date_confirmation'].replace('2022-1-31', '2022-01-31', inplace=True) #one mismatch of date format fix, if it keeps occuring, will implement a permanent fix
     return cases
 
 
