@@ -11,6 +11,8 @@ You can clone the repository, install all the modules found in the requirements 
 ```
 streamlit run app.py
 ```
+**UPDATE**: App has slowed down because of the large data set,the app still works but some functionalities might take some time to load! Sorry about the inconvenience, I am working on a fix ASAP!
+
 # The App's Functions
 
 **1. Cases by Country:** This page in the app displays a bar chart of total confirmed cases in each country with at least 1 confirmed case. There is also a metric that shows the total worldwide cases of monkeypox. A table of the ten countries with the most cases is also displayed. Lastly, there is a select-box widget in which a peron can select a country of their choice and recieve three graphs that represent more data on the specific country chosen. The three graphs being: Gender Distribution, Symptoms of Cases, and Daily Cases.
