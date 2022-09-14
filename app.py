@@ -285,29 +285,31 @@ def data_date():
 def main():
     # app setup
     st.set_page_config(layout="wide")
-    st.sidebar.title('Monkeypox-Dashboard')
-    navigation = st.sidebar.selectbox('Navigate',
-                                      ("Home", "Cases by Country", 'Daily Worldwide Infections',
+    st.sidebar.title("Monkeypox-Dashboard")
+    navigation = st.sidebar.selectbox("Navigate",
+                                      ("Home", "Cases by Country", "Daily Worldwide Infections",
                                        "Cases in the United States"))
-    st.sidebar.subheader('Github Repository:')
-    st.sidebar.markdown('[Monkeypox-Watch Repo](https://github.com/ymahmoud1/Monkeypox-Watch)')
+    st.sidebar.subheader("Github Repository:")
+    st.sidebar.markdown("[Monkeypox-Watch Repo](https://github.com/ymahmoud1/Monkeypox-Watch)")
     # Home page
-    if navigation == 'Home':
-        st.title('Monkeypox - Dashboard')
-        st.subheader('A project by Yazan Mahmoud')
+    if navigation == "Home":
+        st.title("Monkeypox - Dashboard")
+        st.subheader("A project by Yazan Mahmoud")
         st.markdown("Welcome! This app's purpose is to provide people with data visualization of the monkeypox virus.")
         st.markdown("The monkeypox virus is a virus that was first discovered in 1958 among some monkeys that were "
                     " being researched.")
-        st.markdown('The virus is generally found among monkeys and rodents in parts of central and western Africa '
-                    ' ,but can infect humans when in close contact with the carrier.')
+        st.markdown("The virus is generally found among monkeys and rodents in parts of central and western Africa "
+                    ",but can infect humans when in close contact with the carrier.")
+        st.markdown("Symptoms of the virus include: Rashes, Fevers, Chills, Swollen lymph nodes, Exhaustion, Muscle "
+                     "aches, Headaches, and Respiratory Symptoms.")
         st.markdown("**This is the first ever major outbreak of the virus**.")
         image = Image.open('./app pics/Monkeypox.jpg')
         st.image(image,
-                 caption='A close up of the monkeypox virus infecting cells. Credit: UK Health Security '
-                         'Agency/Science Photo Library', width=530)
-        st.write('Thanks to Global Health for the data! Data: Global.health Monkeypox (accessed on 2022-06-14)')
+                 caption="A close up of the monkeypox virus infecting cells. Credit: UK Health Security "
+                         "Agency/Science Photo Library", width=530)
+        st.write("Thanks to Global Health for the data! Data: Global.health Monkeypox (accessed on 2022-06-14)")
 
-    # Country info page
+        # Country info page
     elif navigation == 'Cases by Country':
         col1, col2, col3 = st.columns([3, 0.45, 1])
         with col1:
