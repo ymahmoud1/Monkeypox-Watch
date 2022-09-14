@@ -11,7 +11,7 @@ You can clone the repository, install all the modules found in the requirements 
 ```
 streamlit run app.py
 ```
-**UPDATE**: App has slowed down because of the large data set,the app still works but some functionalities might take some time to load! Sorry about the inconvenience, I am working on a fix ASAP!
+**UPDATE**: App has slowed down because the data set has become pretty large for Streamlit to handle quickly, the app still works but some functionalities might take some time to load! Sorry about the inconvenience, I am working on a fix ASAP!
 
 # The App's Functions
 
