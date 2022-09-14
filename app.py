@@ -50,7 +50,7 @@ nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'An
 
 
 # a function that extracts and updates the monkeypox data
-@st.cache(ttl=24 * 60 * 60)
+@st.experimental_singleton
 def data():
     mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
     cases = mp_data[mp_data['Status'] == 'confirmed']
