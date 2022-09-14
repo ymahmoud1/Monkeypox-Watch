@@ -293,6 +293,9 @@ def main():
     st.sidebar.markdown("To learn more about this app's functionality, feel free to visit the github repository!")
     st.sidebar.subheader("Github Repository:")
     st.sidebar.markdown("[Monkeypox-Watch Repository](https://github.com/ymahmoud1/Monkeypox-Watch)")
+    st.sidebar.subheader("Update:")       
+    st.sidebar.markdown("App functionality is facing some running time delay. This is as a result of the large data set."
+                        " Currently working on a solution, thank you for your patience!")       
     # Home page
     if navigation == "Home":
         st.title("Monkeypox - Dashboard")
