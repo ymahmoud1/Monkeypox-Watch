@@ -289,8 +289,9 @@ def main():
     navigation = st.sidebar.selectbox("Navigate",
                                       ("Home", "Cases by Country", "Daily Worldwide Infections",
                                        "Cases in the United States"))
+    st.sidebar.markdown("To learn more about this app's functionality, feel free to visit the github repository!")
     st.sidebar.subheader("Github Repository:")
-    st.sidebar.markdown("[Monkeypox-Watch Repo](https://github.com/ymahmoud1/Monkeypox-Watch)")
+    st.sidebar.markdown("[Monkeypox-Watch Repository](https://github.com/ymahmoud1/Monkeypox-Watch)")
     # Home page
     if navigation == "Home":
         st.title("Monkeypox - Dashboard")
