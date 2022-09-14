@@ -1,6 +1,6 @@
 # Monkeypox-Watch - Welcome!
 
-**UPDATE**(09/14): App has slowed down because the data set has become pretty large for Streamlit to handle quickly, the app still works but some functionalities might take some time to load! Sorry about the inconvenience, I am working on a fix ASAP! 
+**UPDATE (09/14):** App has slowed down because the data set has become pretty large for Streamlit to handle quickly, the app still works but some functionalities might take some time to load! Sorry about the inconvenience, I am working on a fix ASAP! 
 
 Welcome to my data visualization app on the spread of the monkeypox virus. This is the first major outbreak of the virus that is being tracked worldwide, and as such data is made available. 
 The only issue is that unlike wide spreading pandemics such as COVID, the data on the monkeypox is very limited. 
