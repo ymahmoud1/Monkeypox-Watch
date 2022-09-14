@@ -7,6 +7,7 @@ from PIL import Image
 
 cf.go_offline()
 
+# list of nations
 nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola',
            'Anguilla', 'Antigua And Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia',
            'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus',
@@ -212,7 +213,7 @@ def with_cases():
     return with_mp
 
 
-# A list of countries with no confirmed monkeypox cases
+# A list of countries with no confirmed monkeypox cases; removed countries with cases from a list of all countries
 def no_cases():
     nations_list = nations.copy()
     i = 0
