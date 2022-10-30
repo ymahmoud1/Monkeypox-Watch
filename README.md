@@ -1,6 +1,6 @@
 # Monkeypox-Watch - Welcome!
 
-**UPDATE (09/14):** App has slowed down because the data set has become pretty large for Streamlit to handle quickly, the app still works but some functionalities might take some time to load! Sorry about the inconvenience, I am working on a fix ASAP! 
+**UPDATE** (09/22): Csv file used for the project has been deprecated, last reported day of cases is 09/22. 
 
 Welcome to my data visualization app on the spread of the monkeypox virus. This is the first major outbreak of the virus that is being tracked worldwide, and as such data is made available. 
 The only issue is that unlike wide spreading pandemics such as COVID, the data on the monkeypox is very limited. 
@@ -17,7 +17,7 @@ streamlit run app.py
 
 # The App's Functions
 
-**1. Cases by Country:** This page in the app displays a bar chart of total confirmed cases in each country with at least 1 confirmed case. There is also a metric that shows the total worldwide cases of monkeypox. A table of the ten countries with the most cases is also displayed. Lastly, there is a select-box widget in which a peron can select a country of their choice and recieve three graphs that represent more data on the specific country chosen. The three graphs being: Gender Distribution, Symptoms of Cases, and Daily Cases.
+**1. Cases by Country:** This page in the app displays an interactive bar chart of total confirmed cases in each country with at least 1 confirmed case. There is also a metric that shows the total worldwide cases of monkeypox. A table of the ten countries with the most cases is also displayed. Lastly, there is a select-box widget in which a peron can select a country of their choice and recieve three graphs that represent more data on the specific country chosen. The three graphs being: Gender Distribution, Symptoms of Cases, and Daily Cases.
 
 **2. Daily Worldwide Infections:** This page presents a line chart of the daily reported confirmed cases worldwide. It also shows a metric of the last day cases were reported, how many cases were reported that day, and the difference between the report day and the day before it. There is a select box too that displays the last day of reported confirmed cases and the number of confirmed cases for a selected country.
 
