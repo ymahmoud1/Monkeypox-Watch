@@ -52,7 +52,7 @@ nations = ['Afghanistan', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'An
 # a function that extracts and updates the monkeypox data
 @st.experimental_singleton
 def data():
-    mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest.csv')
+    mp_data = pd.read_csv('https://raw.githubusercontent.com/globaldothealth/monkeypox/main/latest_deprecated.csv')
     cases = mp_data[mp_data['Status'] == 'confirmed']
     cases.rename(columns={'ID': 'Cases'}, inplace=True)
     cases['Date_confirmation'].replace('2022-1-31', '2022-01-31', inplace=True) #one mismatch of date format fix, if it keeps occuring, will implement a permanent fix
@@ -293,10 +293,10 @@ def main():
     st.sidebar.markdown("To learn more about this app's functionality, feel free to visit the github repository!")
     st.sidebar.subheader("Github Repository:")
     st.sidebar.markdown("[Monkeypox-Watch Repository](https://github.com/ymahmoud1/Monkeypox-Watch)")
-    st.sidebar.subheader("Update:")       
+    st.sidebar.subheader("Update:")
     st.sidebar.markdown("App functionality is facing some running time delay. This is a result of the large data set,"
                         " however, everything still works! Currently working on a solution to speed things up," 
-                        " thank you for your patience!")       
+                        " thank you for your patience!")
     # Home page
     if navigation == "Home":
         st.title("Monkeypox - Dashboard")
